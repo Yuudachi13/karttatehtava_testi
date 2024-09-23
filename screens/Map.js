@@ -4,32 +4,31 @@ import MapView, { Marker } from "react-native-maps";
 import * as Location from 'expo-location';
 
 export default function Map(props) {
-    const [marker, setMarker] = useState(null)
-    /*useEffect(() => {
-        (async () => {
-            getUserPosition()
-        })()
-    }, [])
- */
+    const [markers, setMarkers] = useState([])
 
     const showMarker = (e) => {
         const coords = e.nativeEvent.coordinate
-        setMarker(coords)
+        setMarkers((currentMarkers) => [...currentMarkers, coords])
     }
+
     return (
         <MapView
-            style={styles.map}
-            region={props.location}
-           // mapType="satellite"  //muuttaa tyypin sateliittinäkymäksi
-           onLongPress={showMarker}
-        >
-            {marker &&
+        style={styles.map}
+        region={props.location}
+        //mapType="satellites"
+        onLongPress={showMarker}  
+    >
+        {markers.map((marker, index) => (
             <Marker
-            title="my marker"
-            coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
+                key={index}
+                title={`Marker ${index + 1}`}
+                coordinate={{
+                    latitude: marker.latitude,
+                    longitude: marker.longitude,
+                }}
             />
-            }
-            </MapView>
+        ))}
+    </MapView>
             
         )
 }
